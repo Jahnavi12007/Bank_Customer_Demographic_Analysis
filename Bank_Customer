@@ -1,0 +1,98 @@
+1.	# ================================
+2.	# BANK CUSTOMER DEMOGRAPHIC ANALYSIS
+3.	# ================================
+4.	
+5.	import pandas as pd
+6.	import numpy as np
+7.	import matplotlib.pyplot as plt
+8.	
+9.	# ================================
+10.	# STEP 1: CREATE DATASET
+11.	# ================================
+12.	
+13.	data = pd.DataFrame({
+14.	    'Age': [22, 35, 45, 52, 23, 40, 28, 33, 50, 27],
+15.	    'Gender': ['Male', 'Female', 'Male', 'Female', 'Male', 'Female', 'Male', 'Female', 'Male', 'Female'],
+16.	    'Balance': [2000, 5000, 7000, 10000, 3000, 8000, 4000, 6000, 9000, 3500],
+17.	    'Income': [25000, 50000, 60000, 70000, 30000, 65000, 35000, 48000, 72000, 32000],
+18.	    'Loan': ['No', 'Yes', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes', 'Yes', 'No'],
+19.	    'Transactions': [15, 30, 25, 20, 18, 28, 22, 26, 19, 24]
+20.	})
+21.	
+22.	# ================================
+23.	# STEP 2: PREVIEW DATA
+24.	# ================================
+25.	
+26.	print("\n--- DATASET PREVIEW ---")
+27.	print(data.head())
+28.	
+29.	# ================================
+30.	# STEP 3: MISSING VALUES
+31.	# ================================
+32.	
+33.	print("\n--- MISSING VALUES ---")
+34.	print(data.isnull().sum())
+35.	
+36.	# ================================
+37.	# STEP 4: BASIC STATISTICS
+38.	# ================================
+39.	
+40.	print("\n--- STATISTICS ---")
+41.	print(data.describe())
+42.	
+43.	# ================================
+44.	# STEP 5: VISUALIZATION (MATPLOTLIB ONLY)
+45.	# ================================
+46.	
+47.	# Age Distribution
+48.	plt.hist(data['Age'], bins=5)
+49.	plt.title("Age Distribution")
+50.	plt.xlabel("Age")
+51.	plt.ylabel("Count")
+52.	plt.show()
+53.	
+54.	# Gender Distribution
+55.	gender_counts = data['Gender'].value_counts()
+56.	plt.bar(gender_counts.index, gender_counts.values)
+57.	plt.title("Gender Distribution")
+58.	plt.xlabel("Gender")
+59.	plt.ylabel("Count")
+60.	plt.show()
+61.	
+62.	# ================================
+63.	# STEP 6: CUSTOMER SEGMENTATION
+64.	# ================================
+65.	
+66.	data['Age_Group'] = pd.cut(
+67.	    data['Age'],
+68.	    bins=[18, 30, 45, 60],
+69.	    labels=['Young', 'Adult', 'Senior']
+70.	)
+71.	
+72.	group_data = data.groupby('Age_Group')['Balance'].mean()
+73.	
+74.	print("\n--- BALANCE BY AGE GROUP ---")
+75.	print(group_data)
+76.	
+77.	plt.bar(group_data.index.astype(str), group_data.values)
+78.	plt.title("Balance by Age Group")
+79.	plt.xlabel("Age Group")
+80.	plt.ylabel("Balance")
+81.	plt.show()
+82.	
+83.	# ================================
+84.	# STEP 7: CORRELATION
+85.	# ================================
+86.	
+87.	corr = data.select_dtypes(include=[np.number]).corr()
+88.	print("\n--- CORRELATION MATRIX ---")
+89.	print(corr)
+90.	
+91.	# ================================
+92.	# STEP 8: INSIGHTS
+93.	# ================================
+94.	
+95.	print("\n--- INSIGHTS ---")
+96.	print("Young customers → more transactions")
+97.	print("Older customers → higher balance")
+98.	print("Income influences financial behavior")
